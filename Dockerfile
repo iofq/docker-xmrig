@@ -1,6 +1,6 @@
 FROM alpine:latest
 
-ENV version=6.4.0
+ENV version=6.5.0
 RUN apk add --no-cache wget
 
 WORKDIR /app
