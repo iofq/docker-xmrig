@@ -1,12 +1,15 @@
 FROM alpine:latest
 
-ENV version=6.5.0
-RUN apk add --no-cache wget
+ENV VERSION=6.6.1
+RUN apk add --no-cache curl
 
-WORKDIR /app
+WORKDIR /root
 ADD config/doxmr.json ./
-RUN wget -O doxmr.tar.gz https://github.com/xmrig/xmrig/releases/download/v$version/xmrig-$version-linux-static-x64.tar.gz && \
-    tar xzvf doxmr.tar.gz -C /app
+RUN curl -sLO https://github.com/xmrig/xmrig/releases/download/v$VERSION/xmrig-$VERSION-linux-static-x64.tar.gz && \
+    tar xzvf xmrig-$VERSION-linux-static-x64.tar.gz
+WORKDIR xmrig-$VERSION
+RUN sha256sum -c SHA256SUMS && \
+  ln -s ./xmrig ./doxmr
+    
 
-RUN ln -s ./xmrig-$version/xmrig ./doxmr
 ENTRYPOINT ./doxmr -c ./doxmr.json
